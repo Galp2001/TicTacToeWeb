@@ -45,20 +45,36 @@ function App() {
   }
 
   let status = ''
+  const isDraw = !winner && squares.every(Boolean)
   if (winner) status = `Winner: ${winner}`
-  else if (squares.every(Boolean)) status = 'Draw!'
+  else if (isDraw) status = 'Draw!'
   else status = `Next turn: ${xIsNext ? 'X' : 'O'}`
 
   return (
     <div className="App">
       <h1>Tic-Tac-Toe</h1>
+
+      <div className="status-top">{status}</div>
+
       <div className="game">
         <Board squares={squares} onClick={handleClick} winningLine={winningLine} />
-        <div className="controls">
-          <div className="status">{status}</div>
-          <button className="restart" onClick={handleRestart}>Restart / New Game</button>
-        </div>
       </div>
+
+      <div className="controls">
+        <button className="restart" onClick={handleRestart}>Restart / New Game</button>
+      </div>
+
+      {(winner || isDraw) && (
+        <div className="grand-alert" role="dialog" aria-live="assertive">
+          <div className="grand-content">
+            <div className="grand-title">{winner ? `Winner: ${winner}` : 'Draw!'}</div>
+            <div className="grand-sub">{winner ? `Congratulations ${winner}!` : 'Nobody wins — try again!'}</div>
+            <div className="grand-actions">
+              <button className="restart big" onClick={handleRestart}>Play Again</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
